@@ -1,0 +1,38 @@
+{
+    "name": "koa.admin",
+    "version": "1.0.0",
+    "description": "koa.admin template",
+    "main": "./src/app.js",
+    "scripts": {
+        "dev": "node ./src/app.js",
+        "dev--watch": "nodemon",
+        "obfuscate": "javascript-obfuscator ./dist/app.js --string-array-encoding rc4 --output ./dist/bundle.js",
+        "bytenode": "bytenode --compile ./dist/bundle.js",
+        "build": "webpack --config ./webpack.config.js && npm run obfuscate && npm run bytenode",
+        "pm2": "pm2 start ./dist/launcher.js --watch"
+    },
+    "keywords": [
+        "koa.admin"
+    ],
+    "author": "wmper",
+    "license": "ISC",
+    "dependencies": {
+        "ejs": "^3.1.6",
+        "koa": "^2.13.1",
+        "koa-bodyparser": "^4.3.0",
+        "koa-router": "^10.0.0",
+        "koa-static": "^5.0.0",
+        "koa-views": "^7.0.0",
+        "mysql": "^2.18.1",
+        "node-uuid": "^1.4.8"
+    },
+    "devDependencies": {
+        "busboy": "^0.3.1",
+        "bytenode": "^1.1.7",
+        "clean-webpack-plugin": "^3.0.0",
+        "copy-webpack-plugin": "^7.0.0",
+        "webpack": "^5.22.0",
+        "webpack-cli": "^4.5.0",
+        "webpack-node-externals": "^2.5.2"
+    }
+}
