@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>文档管理</title>
+        <link rel="stylesheet" href="/css/element.css" />
+        <link rel="stylesheet" href="/editor.md/css/editormd.min.css" />
+        <script src="/js/vue.js"></script>
+        <script src="/js/element.js"></script>
+        <script src="/js/axios.min.js"></script>
+        <script src="/editor.md/jquery.min.js"></script>
+        <script src="/editor.md/editormd.min.js"></script>
+        <style>
+            .editormd-menu > li {
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <template>
+                <el-form label-position="right" label-width="80px" :model="form" style="margin-top: 15px">
+                    <el-form-item label="id" hidden>
+                        <el-input v-model="form.id"></el-input>
+                    </el-form-item>
+                    <el-form-item label="分类">
+                        <el-cascader style="width: 200px" v-model="form.category_id" :options="categorys" @change="handleChange" :props="{value:'id',label:'name',emitPath:false,checkStrictly:true}"></el-cascader>
+                    </el-form-item>
+                    <el-form-item label="标题">
+                        <el-input v-model="form.title" style="width: 800px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="关键字">
+                        <el-input v-model="form.keywords" type="textarea" :rows="2" style="width: 800px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述">
+                        <el-input v-model="form.description" type="textarea" :rows="3" style="width: 800px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="标签">
+                        <el-input v-model="form.tags" style="width: 300px"></el-input>
+                        <el-tooltip class="item" effect="dark" content="e.g：标签一,标签二" placement="right">
+                            <i class="el-icon-warning" style="margin-left: 10px; color: #e6a23c"></i>
+                        </el-tooltip>
+                    </el-form-item>
+                    <el-form-item label="内容">
+                        <div id="editor">
+                            <el-input style="display: none" type="textarea" :rows="2"></el-input>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="handleOk()">确 定</el-button>
+                        <el-button @click="handlGoback()">返 回</el-button>
+                    </el-form-item>
+                </el-form>
+            </template>
+        </div>
+
+        <script>
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem('token')
+            new Vue({
+                el: '#app',
+                data: {
+                    form: {
+                        id: 0,
+                        category_id: null,
+                        title: null,
+                        keywords: null,
+                        description: null,
+                        tags: null,
+                        markdown: null,
+                        contents: null
+                    },
+                    categorys: []
+                },
+                methods: {
+                    handleOk() {
+                        let _this = this
+
+                        if (!_this.form.category_id) {
+                            _this.$message.warning('请选择分类')
+                            return
+                        }
+
+                        axios.post('/api/document/save', _this.form).then((res) => {
+                            if (res.data.code != 0) {
+                                _this.$message.warning(res.data.msg)
+                                return
+                            }
+
+                            _this.$message.success(res.data.msg)
+                        })
+                    },
+                    handleChange(value) {
+                        this.form.category_id = value
+                    },
+                    handlGoback() {
+                        location.href = '/admin/document'
+                    }
+                },
+                mounted() {
+                    let _this = this
+                    axios.get('/api/category/tree').then((res) => {
+                        if (res.data.code == 0) {
+                            _this.categorys = res.data.data
+                        }
+                    })
+
+                    // /admin/document/17
+                    let id = parseInt(location.pathname.slice(16))
+                    if (id > 0) {
+                        axios.get('/api/document/' + id).then((res) => {
+                            if (res.data.code == 0) {
+                                _this.form = res.data.data
+                            }
+                        })
+                    }
+
+                    let editor = window.editormd('editor', {
+                        height: 500,
+                        path: '/editor.md/lib/',
+                        saveHTMLToTextarea: true,
+                        onload: function () {
+                            this.setMarkdown(_this.form.markdown)
+                        },
+                        onchange: function () {
+                            _this.form.markdown = this.getMarkdown()
+                            _this.form.contents = this.getHTML()
+                        }
+                    })
+
+                    editor.setToolbarAutoFixed(false)
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>koa.blog系统</title>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" href="/css/common.css" />
+        <link rel="stylesheet" href="/css/element.css" />
+        <script src="/js/vue.js"></script>
+        <script src="/js/element.js"></script>
+        <script src="/js/axios.min.js"></script>
+        <style>
+            #app {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                min-height: 100%;
+                background: #f5f5f5;
+            }
+            .top {
+                width: 100%;
+                height: 80px;
+                background: #ccc;
+            }
+            .wrap {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                height: 100%;
+            }
+            .wrap .left {
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+            }
+            .wrap .menu {
+                height: 100%;
+                width: 120px;
+                background: rgb(25, 33, 43);
+            }
+            .wrap .menu li {
+                font-size: 16px;
+                color: #fff;
+                text-align: center;
+                padding: 12px;
+                cursor: pointer;
+            }
+            .wrap .menu li:hover {
+                background: rgb(102, 102, 102);
+            }
+            .wrap .menu li.current {
+                background: rgb(37, 93, 255);
+            }
+            .wrap .menu i {
+                color: #fff;
+                margin-right: 10px;
+            }
+            .wrap .sub-menu {
+                display: flex;
+                flex-direction: column;
+                background: #ffffff;
+                width: 120px;
+            }
+            .wrap .sub-menu li {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 12px;
+                cursor: pointer;
+                font-size: 14px;
+                color: #666;
+            }
+            .wrap .sub-menu li.line {
+                border-bottom: 1px solid #efefef;
+                cursor: auto;
+            }
+            .wrap .sub-menu li:hover {
+                color: #409eff;
+            }
+            .wrap .sub-menu li.current {
+                color: #409eff;
+                background: #f2f2f2;
+            }
+            .wrap .right {
+                width: 100%;
+                background: #fff;
+                margin: 15px;
+                padding: 10px;
+            }
+            .wrap .right iframe {
+                border: 0;
+                width: 100%;
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: scroll;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div class="top"></div>
+            <div class="wrap">
+                <div class="left">
+                    <ul class="menu">
+                        <li v-for="(item, index) in module" v-bind:key="index" v-on:click="addClass(index, 0)" v-bind:class="{ current: index == mid }"><i :class="item.icon"></i>{{ item.name }}</li>
+                    </ul>
+                    <ul class="sub-menu" v-if="mid==0?false:true">
+                        <template>
+                            <li class="line">
+                                <b>{{ module[mid].name }}</b>
+                            </li>
+                            <li v-for="(item, index) in module[mid].children" v-bind:key="index" v-on:click="addClass(index, 1, item)" v-bind:class="{ current: index == mid2 }">{{ item.name }}</li>
+                        </template>
+                    </ul>
+                </div>
+                <div class="right" v-loading="loading">
+                    <iframe ref="iframe" :src="src"></iframe>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem('token')
+        new Vue({
+            el: '#app',
+            data: {
+                mid: 0,
+                mid2: -1,
+                module: [],
+                src: '/admin/console',
+                loading: true
+            },
+            methods: {
+                addClass(index, i, e) {
+                    if (i == 0) {
+                        this.mid = index
+                        this.mid2 = -1
+
+                        if (index == 0) {
+                            this.loading = true
+                            this.src = '/admin/console'
+                        }
+                    } else {
+                        this.loading = true
+                        this.mid2 = index
+                        this.src = e.path
+                    }
+                }
+            },
+            mounted() {
+                const _this = this
+                const { iframe } = this.$refs
+
+                if (iframe.attachEvent) {
+                    iframe.attachEvent('onload', () => {
+                        _this.loading = false
+                    })
+                } else {
+                    iframe.onload = function () {
+                        _this.loading = false
+                    }
+                }
+
+                axios.get('/api/menu/tree').then((res) => {
+                    if (res.data.code == 0) {
+                        _this.module = res.data.data
+                    }
+                })
+            }
+        })
+    </script>
+</html>

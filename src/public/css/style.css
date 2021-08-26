@@ -1,0 +1,280 @@
+@import url(/css/common.css);
+
+body {
+    background: #f5f5f5;
+    color: #666;
+}
+.container {
+    width: 1200px;
+    margin: 0 auto;
+}
+.head {
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+}
+.head .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 80px;
+    align-items: center;
+}
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+.menu a {
+    margin-right: 20px;
+    font-size: 18px;
+}
+.menu a:hover {
+    text-decoration: none;
+}
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.main .list {
+    background: #fff;
+    width: 880px;
+}
+.main .list .sub {
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+}
+.main .sub a {
+    display: flex;
+    color: #666;
+    border-radius: 3px;
+    margin-right: 15px;
+    padding: 2px 3px;
+}
+
+.main .sub a.current {
+    background: #45b6f7;
+    color: #fff;
+}
+
+.main .sub a:hover {
+    background: #45b6f7;
+    color: #fff;
+    text-decoration: none;
+}
+
+.main .list .item {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 15px;
+    border-bottom: 1px solid #ececec;
+}
+.main .list .item:hover {
+    background: #f5f5f5;
+}
+.main .content {
+    background: #fff;
+    width: 880px;
+}
+.main .doc {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.main .doc .title {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 9px;
+}
+.main .doc .title a {
+    display: flex;
+    flex-direction: row;
+    font-size: 16px;
+    color: #666;
+}
+.main .doc .title span {
+    display: flex;
+    background: #45b6f7;
+    color: #fff;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+.main .list .doc p {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 5px;
+}
+.main .doc span {
+    font-size: 12px;
+    color: #777;
+}
+.main .nodes {
+    width: 300px;
+}
+.main .nodes .line {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+    font-size: 16px;
+    padding-bottom: 5px;
+}
+.main .node {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 5px;
+    line-height: 25px;
+}
+
+.main .node.n-1 a {
+    color: #45b6f7;
+}
+
+.pager {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 15px 0;
+}
+.pager a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+}
+.pager a.current {
+    background: #f5f5f5;
+}
+.pager a:hover {
+    background: #f5f5f5;
+}
+
+.nav {
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+}
+.nav a {
+    color: #45b6f7;
+}
+
+.nav .mark::after {
+    content: '>';
+    margin: 0 5px;
+}
+
+.content .title {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 15px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.content .title h1 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #000;
+    font-weight: 500;
+}
+.content .box {
+    padding: 15px;
+    color: #000;
+    font-size: 14px;
+    line-height: 25px;
+}
+
+.content .tags {
+    display: flex;
+    flex-direction: row;
+    padding: 0 15px 15px 15px;
+}
+
+.content .tags a {
+    display: flex;
+    padding: 2px 3px;
+    background: #45b6f7;
+    color: #fff;
+    font-size: 13px;
+    border-radius: 3px;
+    margin-right: 15px;
+}
+.content .tags a:hover {
+    box-shadow: 3px 3px #ececec;
+}
+
+.content .reply {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-top: 20px solid #f5f5f5;
+    display: none;
+}
+.content .reply .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.content .reply input {
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #000;
+    height: 25px;
+    padding: 5px;
+    border-radius: 3px;
+    width: 250px;
+}
+
+.content .reply textarea {
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #000;
+    padding: 5px;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.content .reply button {
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #000;
+    padding: 5px;
+    border-radius: 5px;
+    width: 80px;
+    cursor: pointer;
+}
+.content .reply button:hover {
+    font-weight: bold;
+    box-shadow: 2px 2px #ddd;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    background: #fff;
+    margin-top: 20px;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.footer .link {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+}
+.footer .link a {
+    margin-right: 20px;
+}
+.footer .item {
+    margin-top: 15px;
+}

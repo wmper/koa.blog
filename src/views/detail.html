@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= model.title +' - '+ site.name %></title>
+        <meta name="keywords" content="<%= model.keywords %>" />
+        <meta name="description" content="<%= model.description %>" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/prism/prism.css" />
+        <link rel="stylesheet" href="/font-awesome/font-awesome.min.css" />
+    </head>
+    <body>
+        <%- include('head.html') -%>
+        <div class="container main">
+            <div class="content">
+                <div class="nav"><a href="/" class="mark">koa.blog</a><a href="/categories/<%=model.category_id %>"><%=model.category_name %></a></div>
+                <div class="title">
+                    <h1><%= model.title %></h1>
+                    <p><i class="fa fa-clock-o"></i> <%= model.create_time %> · <i class="fa fa-eye"></i> <%= model.views %> · <i class="fa fa-user"></i> <%= model.comments %></p>
+                </div>
+                <div class="box"><%- model.contents %></div>
+                <div class="tags"><a href="">前端</a><a href="">小工具</a><a href="">Circle</a></div>
+                <div class="reply">
+                    <div class="item">发表评论</div>
+                    <div class="item">昵称：<input type="text" /></div>
+                    <div class="item">邮箱：<input type="text" /></div>
+                    <div class="item">
+                        <textarea rows="5"></textarea>
+                    </div>
+                    <div class="item"><button>提交</button></div>
+                </div>
+            </div>
+            <%- include('node.html',site) -%>
+        </div>
+        <%- include('footer.html') -%>
+        <script src="/prism/prism.js"></script>
+    </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>菜单管理</title>
+        <link rel="stylesheet" href="/css/element.css" />
+        <script src="/js/vue.js"></script>
+        <script src="/js/element.js"></script>
+        <script src="/js/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <template>
+                <div style="margin-bottom: 15px">
+                    <el-button type="primary" plain size="small" @click="handleAdd()">新增</el-button>
+                    <el-button size="small" icon="el-icon-refresh-left" @click="load(0)">刷新</el-button>
+                </div>
+                <el-table :data="tableData" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" default-expand-all>
+                    <el-table-column type="index" label="序号" width="80"></el-table-column>
+                    <el-table-column prop="name" label="名称" width="280"></el-table-column>
+                    <el-table-column prop="icon" label="图标" width="280">
+                        <template slot-scope="scope"><i v-if="scope.row.icon" :class="scope.row.icon"></i> {{scope.row.icon}}</template>
+                    </el-table-column>
+                    <el-table-column prop="path" label="路径" width="280"></el-table-column>
+                    <el-table-column prop="sort" label="排序"> </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="180">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row,0)" type="text" size="small">添加下级</el-button>
+                            <el-button @click="handleClick(scope.row,1)" type="text" size="small">编辑</el-button>
+                            <el-button v-if="scope.row.children.length==0?true:false" @click="handleDelete(scope.row.id)" type="text" size="small" style="color: #ff0000">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-dialog :title="title" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false" width="35%">
+                    <el-form label-position="right" label-width="80px" :model="form">
+                        <el-form-item label="id" hidden>
+                            <el-input v-model="form.id"></el-input>
+                        </el-form-item>
+                        <el-form-item label="parent_id" hidden>
+                            <el-input v-model="form.parent_id"></el-input>
+                        </el-form-item>
+                        <el-form-item label="上级">
+                            <el-input v-model="form.parent_name" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item label="名称">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="路径" v-if="form.parent_id==0?false:true">
+                            <el-input v-model="form.path"></el-input>
+                        </el-form-item>
+                        <el-form-item label="图标" v-if="form.parent_id>0?false:true">
+                            <el-input v-model="form.icon"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="handleOk()">确 定</el-button>
+                    </span>
+                </el-dialog>
+            </template>
+        </div>
+        <script>
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem('token')
+            new Vue({
+                el: '#app',
+                data: {
+                    title: '新增',
+                    dialogVisible: false,
+                    tableData: [],
+                    form: {
+                        id: 0,
+                        parent_id: 0,
+                        parent_name: null,
+                        name: null,
+                        path: null,
+                        icon: null,
+                        sort: 0
+                    }
+                },
+                methods: {
+                    load(type) {
+                        let _this = this
+                        axios.get('/api/menu/tree').then((res) => {
+                            if (res.data.code == 0) {
+                                _this.tableData = res.data.data
+
+                                if (type == 0) _this.$message.success('刷新成功')
+                            }
+                        })
+                    },
+                    handleAdd() {
+                        this.handleClick({ id: 0, name: null }, 0)
+                    },
+                    handleClick(e, i) {
+                        if (i == 1) {
+                            this.title = '编辑'
+                            this.form = JSON.parse(JSON.stringify(e))
+                        } else {
+                            this.title = '新增'
+                            this.form = {
+                                id: 0,
+                                parent_id: e.id,
+                                parent_name: e.name,
+                                name: null,
+                                path: null,
+                                icon: null,
+                                sort: 0
+                            }
+                        }
+                        this.dialogVisible = true
+                    },
+                    handleOk() {
+                        let _this = this
+
+                        axios.post('/api/menu/save', _this.form).then((res) => {
+                            if (res.data.code != 0) {
+                                _this.$message.warning(res.data.msg)
+                                return
+                            }
+
+                            _this.$message.success(res.data.msg)
+                            _this.load()
+                            _this.dialogVisible = false
+                        })
+                    },
+                    handleDelete(id) {
+                        let _this = this
+
+                        this.$confirm('确认删除?', '提示', {
+                            type: 'warning'
+                        }).then(() => {
+                            axios.delete('/api/menu/' + id).then((res) => {
+                                if (res.data.code == 0) {
+                                    _this.$message.success('删除成功')
+                                    _this.load()
+                                }
+                            })
+                        })
+                    }
+                },
+                mounted() {
+                    this.load()
+                }
+            })
+        </script>
+    </body>
+</html>

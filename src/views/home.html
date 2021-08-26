@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%=site.name %></title>
+        <meta name="keywords" content="<%=site.keywords %>" />
+        <meta name="description" content="<%=site.description %>" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/font-awesome/font-awesome.min.css" />
+    </head>
+    <body>
+       <%- include('head.html') %>
+        <div class="container main">
+            <div class="list">
+                <div class="sub"><a class="current" href="/?s=0">最新</a><a href="/?s=1">热门</a></div>
+                <% model.list.forEach(function(item){ %>
+                    <div class="item">
+                        <img src="/img/art.jpg" width="160" height="90" />
+                        <div class="doc">
+                            <div class="title"><span><%=item.category_name %></span><a href="/doc/<%=item.id %>"><%=item.title %></a></div>
+                            <p><%= item.description %></p>
+                            <span><i class="fa fa-clock-o"></i> <%=item.create_time %> · <i class="fa fa-eye"></i> <%=item.views %> · <i class="fa fa-user"></i> <%=item.comments %></p>
+                        </div>
+                    </div>
+                <% }) %>
+                <%- include('pager.html',{model:pager,url:''}) %>
+            </div>
+            <%- include('node.html') -%>
+        </div>
+        <%- include('footer.html') %>
+    </body>
+</html>

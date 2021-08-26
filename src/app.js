@@ -1,25 +1,16 @@
 const Koa = require('koa')
-const { join } = require('path')
+const path = require('path')
 const statics = require('koa-static')
 const views = require('koa-views')
+const bodyParser = require('koa-bodyparser')
+const error = require('./middleware/error')
 
 let app = new Koa()
 
-app.use(async (ctx, next) => {
-    try {
-        await next()
-    } catch (err) {
-        ctx.status = 500
-        ctx.body = 'Internal server error, please try again.'
-    }
-})
-
-app.use(statics(join(__dirname, './public')))
-app.use(
-    views(join(__dirname, './views'), {
-        extension: 'ejs'
-    })
-)
+app.use(error())
+app.use(bodyParser())
+app.use(statics(path.join(__dirname, './public')))
+app.use(views(path.join(__dirname, './views'), { map: { html: 'ejs' } }))
 
 require('./router/index')(app)
 

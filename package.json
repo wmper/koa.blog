@@ -1,34 +1,39 @@
 {
-    "name": "koa.admin",
+    "name": "koa.blog",
     "version": "1.0.0",
-    "description": "koa.admin template",
+    "description": "koa.blog system",
     "main": "./src/app.js",
     "scripts": {
         "dev": "node ./src/app.js",
         "dev--watch": "nodemon",
         "obfuscate": "javascript-obfuscator ./dist/app.js --string-array-encoding rc4 --output ./dist/bundle.js",
         "bytenode": "bytenode --compile ./dist/bundle.js",
-        "build": "webpack --config ./webpack.config.js && npm run obfuscate && npm run bytenode",
-        "pm2": "pm2 start ./dist/launcher.js --watch"
+        "clean": "shx rm -r ./dist/app.js ./dist/bundle.js",
+        "build": "webpack --config ./webpack.config.js && npm run obfuscate && npm run bytenode && npm run clean",
+        "pm2": "pm2 start ./dist/main.js --watch"
     },
     "keywords": [
-        "koa.admin"
+        "koa.blog"
     ],
     "author": "wmper",
-    "license": "ISC",
+    "license": "Apache-2.0 License",
     "dependencies": {
+        "busboy": "^0.3.1",
+        "bytenode": "^1.3.3",
+        "crypto": "^1.0.1",
         "ejs": "^3.1.6",
+        "jsonwebtoken": "^8.5.1",
         "koa": "^2.13.1",
         "koa-bodyparser": "^4.3.0",
+        "koa-jwt": "^4.0.0",
         "koa-router": "^10.0.0",
         "koa-static": "^5.0.0",
         "koa-views": "^7.0.0",
         "mysql": "^2.18.1",
-        "node-uuid": "^1.4.8"
+        "node-uuid": "^1.4.8",
+        "shx": "^0.3.3"
     },
     "devDependencies": {
-        "busboy": "^0.3.1",
-        "bytenode": "^1.1.7",
         "clean-webpack-plugin": "^3.0.0",
         "copy-webpack-plugin": "^7.0.0",
         "webpack": "^5.22.0",

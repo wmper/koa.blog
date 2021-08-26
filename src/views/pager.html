@@ -1,0 +1,29 @@
+<div class="pager">
+    <% if(model.prePage > 0){%>
+    <a href="<%=url+'?p='+ model.prePage %>">&lt;</a>
+    <% if(model.pageIndex >= 5){%>
+    <a href="<%=url+'?p=1' %>">1</a>
+    <a href="javascript:;">...</a>
+    <%}%>
+    <span></span>
+    <% }else{ %>
+    <a href="javascript:;">&lt;</a>
+    <% } %>
+    <span></span>
+    <% model.items.forEach(function(i){%> <% if(i==model.pageIndex){%>
+    <a href="<%=url+'?p='+ i %>" class="current"><%=i %></a>
+    <%}else{%>
+    <a href="<%=url+'?p='+ i %>"><%=i %></a>
+    <%}%> <%})%>
+    <span></span>
+    <% if( model.pageIndex <= model.pageCount -4 ){%>
+    <a href="javascript:;">...</a>
+    <a href="<%=url+'?p='+model.pageCount %>"><%=model.pageCount%></a>
+    <%}%>
+    <span></span>
+    <% if(model.nextPage > 0){ %>
+    <a href="<%=url+'?p='+ model.nextPage %>">&gt;</a>
+    <% }else{ %>
+    <a href="javascript:;">&gt;</a>
+    <% } %>
+</div>

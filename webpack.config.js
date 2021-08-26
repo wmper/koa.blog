@@ -28,7 +28,7 @@ module.exports = {
             patterns: [
                 { from: __dirname + '/src/public', to: __dirname + '/dist/public' },
                 { from: __dirname + '/src/views', to: __dirname + '/dist/views' },
-                { from: __dirname + '/src/launcher.js', to: __dirname + '/dist/launcher.js' }
+                { from: __dirname + '/src/main.js', to: __dirname + '/dist/main.js' }
             ]
         })
     ]

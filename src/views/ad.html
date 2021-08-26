@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%=site.name %></title>
+        <meta name="keywords" content="<%=site.keywords %>" />
+        <meta name="description" content="<%=site.description %>" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/font-awesome/font-awesome.min.css" />
+    </head>
+    <body>
+        <%- include('head.html') -%>
+        <div class="container main">
+            <div class="content">
+                <div class="nav"><a href="/" class="mark">koa.blog</a><a href="/ad">广告投放</a></div>
+                <div class="box">
+                    <p>目前本站能够提供的 2 种广告形式</p>
+
+                    <h2 style="margin-top: 15px">A1 - 全站广告</h2>
+                    <p>1、广告位位于菜单底部，网站底部</p>
+                    <p>2、图片尺寸 1200x100 图片 + 链接</p>
+                    <p>3、该广告位是独家的，在你投放时，不会有其他广告来争夺注意力</p>
+
+                    <h2 style="margin-top: 15px">A2 - 侧栏广告</h2>
+                    <p>1、出现在指定话题节点的每一个主题的右侧</p>
+                    <p>2、270x150 图片 + 链接</p>
+                    <p>3、当访问者在这些节点的主题时，就会看到贵公司的广告</p>
+                    <p>4、最新投放的广告会显示在前面</p>
+
+                    <h2 style="margin-top: 15px">关于广告效果</h2>
+                    <p>1、本站的月度 PV 目前大约 250 万</p>
+                    <p>2、每月覆盖超过 50 万名专业人士</p>
+                    <p>3、我们一直在持续增长中</p>
+
+                    <h2 style="margin-top: 15px">广告投放流程</h2>
+                    <p>1、发送邮件给我</p>
+                    <p>2、我将在回信中告知可行的投放开始时间及付款方式</p>
+                    <p>3、选择一种你觉得方便的付款方式进行付款</p>
+                    <p>4、将广告物料发送给我们 开始投放！</p>
+                </div>
+            </div>
+            <%- include('node.html',site) -%>
+        </div>
+        <%- include('footer.html') -%>
+    </body>
+</html>
