@@ -1,5 +1,6 @@
 const { query, single, getPaged, excute } = require('../utils/mysql')
 const { getUser } = require('./user')
+const { getCategoryTree } = require('./category')
 
 /**
  * 获取站点信息
@@ -26,9 +27,10 @@ async function getDoc(id) {
  */
 async function getHomeDocs(pageIndex, sort) {
     let str = 'a.id'
+    let pageSize = 20
     if (sort == 1) str = 'a.views'
 
-    return await getPaged('select a.*,b.name as category_name from document a left join category b on a.category_id = b.id order by ' + str + ' desc', [], { pageIndex: pageIndex, pageSize: 20 })
+    return await getPaged('select a.*,b.name as category_name from document a left join category b on a.category_id = b.id order by ' + str + ' desc', [], { pageIndex: pageIndex, pageSize: pageSize })
 }
 
-module.exports = { getSite, getDoc, getHomeDocs, getUser }
+module.exports = { getSite, getDoc, getHomeDocs, getUser, getCategoryTree }
