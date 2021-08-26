@@ -14,7 +14,7 @@ const api_manage = require('../api/admin')
 module.exports = (app) => {
     app.use(
         jwt({ secret: config.jwt_secret }).unless({
-            path: ['/api/login'],
+            path: ['/api/login', '/api/upload'],
             custom: (ctx) => {
                 return ctx.path.startsWith('/api/') == true ? false : true
             }

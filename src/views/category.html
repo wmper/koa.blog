@@ -16,7 +16,9 @@
                 <div class="nav"><a href="/" class="mark">koa.blog</a><a href="/categories/<%=model.id %>"><%=model.name %></a></div>
                 <% list.forEach(function(item){ %>
                     <div class="item">
-                        <img src="/img/art.jpg" width="160" height="90" />
+                        <%if(item.logo){%>
+                            <div class="logo"><img src="<%=item.logo %>" /></div>
+                        <%}%>
                         <div class="doc">
                             <div class="title"><span><%=item.category_name %></span><a href="/doc/<%=item.id %>"><%=item.title %></a></div>
                             <p><%= item.description %></p>

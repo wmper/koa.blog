@@ -114,6 +114,7 @@ route.post('/api/document/save', async (ctx) => {
         keywords: form.keywords,
         description: form.description,
         tags: form.tags,
+        logo: form.logo,
         markdown: form.markdown,
         contents: form.contents
     }

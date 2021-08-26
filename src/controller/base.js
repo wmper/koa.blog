@@ -9,9 +9,9 @@ route.get('/error', async (ctx) => {
 })
 
 route.post('/api/upload', async (ctx) => {
-    let result = { filename: null, size: 0 }
+    let result = { success: 0, url: null, size: 0, message: '上传失败' }
     let busboy = new Busboy({ headers: ctx.req.headers })
-    let dir = path.join('./upload/')
+    let dir = path.join('./upload/images/')
 
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir)
@@ -23,7 +23,7 @@ route.post('/api/upload', async (ctx) => {
             var suffix = temps[temps.length - 1]
 
             let name = uuid.v1().replace(/-/g, '') + '.' + suffix
-            result.filename = '/upload/' + name
+            result.url = '/images/' + name
 
             file.pipe(fs.createWriteStream(dir + name))
 
@@ -31,7 +31,10 @@ route.post('/api/upload', async (ctx) => {
                 result.size = data.length
             })
 
-            file.on('end', function () {})
+            file.on('end', function () {
+                result.success = 1
+                result.message = '上传成功'
+            })
         })
 
         busboy.on('field', function (fieldname, val, _fieldnameTruncated, _valTruncated, _encoding, _mimetype) {

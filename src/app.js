@@ -10,6 +10,7 @@ let app = new Koa()
 app.use(error())
 app.use(bodyParser())
 app.use(statics(path.join(__dirname, './public')))
+app.use(statics(path.join(__dirname, '../upload')))
 app.use(views(path.join(__dirname, './views'), { map: { html: 'ejs' } }))
 
 require('./router/index')(app)

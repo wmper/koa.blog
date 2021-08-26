@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>文档管理</title>
+        <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/css/element.css" />
         <link rel="stylesheet" href="/editor.md/css/editormd.min.css" />
         <script src="/js/vue.js"></script>
@@ -13,8 +14,9 @@
         <script src="/editor.md/jquery.min.js"></script>
         <script src="/editor.md/editormd.min.js"></script>
         <style>
-            .editormd-menu > li {
-                padding: 0;
+            .custom .el-form-item__content {
+                line-height: 20px;
+                margin-right: 15px;
             }
         </style>
     </head>
@@ -43,7 +45,13 @@
                             <i class="el-icon-warning" style="margin-left: 10px; color: #e6a23c"></i>
                         </el-tooltip>
                     </el-form-item>
-                    <el-form-item label="内容">
+                    <el-form-item label="封面">
+                        <el-upload class="avatar-uploader" action="/api/upload" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                            <img v-if="form.logo" :src="form.logo" class="avatar" />
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item label="内容" class="custom">
                         <div id="editor">
                             <el-input style="display: none" type="textarea" :rows="2"></el-input>
                         </div>
@@ -68,6 +76,7 @@
                         keywords: null,
                         description: null,
                         tags: null,
+                        logo: null,
                         markdown: null,
                         contents: null
                     },
@@ -96,6 +105,25 @@
                     },
                     handlGoback() {
                         location.href = '/admin/document'
+                    },
+                    handleAvatarSuccess(res, file) {
+                        if (res.success == 1) {
+                            this.form.logo = res.url
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    },
+                    beforeAvatarUpload(file) {
+                        const isJPG = file.type === 'image/jpeg'
+                        const isLt2M = file.size / 1024 / 1024 < 2
+
+                        if (!isJPG) {
+                            this.$message.error('上传头像图片只能是 JPG 格式!')
+                        }
+                        if (!isLt2M) {
+                            this.$message.error('上传头像图片大小不能超过 2MB!')
+                        }
+                        return isJPG && isLt2M
                     }
                 },
                 mounted() {
@@ -117,9 +145,15 @@
                     }
 
                     let editor = window.editormd('editor', {
-                        height: 500,
+                        autoHeight: true,
                         path: '/editor.md/lib/',
                         saveHTMLToTextarea: true,
+                        toolbarIcons: function () {
+                            return ['undo', 'redo', '|', 'bold', 'del', 'italic', 'quote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'list-ul', 'list-ol', 'hr', '|', 'link', 'reference-link', '|', 'image', 'code', 'code-block', 'table', 'clear']
+                        },
+                        imageUpload: true,
+                        imageFormats: ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
+                        imageUploadURL: '/api/upload',
                         onload: function () {
                             this.setMarkdown(_this.form.markdown)
                         },

@@ -145,7 +145,7 @@
                     } else {
                         this.loading = true
                         this.mid2 = index
-                        this.src = e.path
+                        this.src = e.path + '?t=' + new Date().getUTCMilliseconds()
                     }
                 }
             },
