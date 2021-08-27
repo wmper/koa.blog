@@ -129,11 +129,11 @@
                 </div>
                 <div class="right">
                     <a href="/help" target="_blank">帮助文档</a>
-                    <el-dropdown>
+                    <el-dropdown @command="handleCommand">
                         <span class="el-dropdown-link"><el-avatar size="medium" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar><i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>账户信息</el-dropdown-item>
-                            <el-dropdown-item divided>退出登录</el-dropdown-item>
+                            <el-dropdown-item command="info">账户信息</el-dropdown-item>
+                            <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -177,12 +177,23 @@
 
                         if (index == 0) {
                             this.loading = true
-                            this.src = '/admin/console'
+                            this.src = '/admin/console' + '?t=' + new Date().getUTCMilliseconds()
                         }
                     } else {
                         this.loading = true
                         this.mid2 = index
                         this.src = e.path + '?t=' + new Date().getUTCMilliseconds()
+                    }
+                },
+                handleCommand(command) {
+                    switch (command) {
+                        case 'info':
+                            this.src = '/admin/info'
+                            break
+                        case 'logout':
+                            localStorage.removeItem('token')
+                            location.href = '/admin/login'
+                            break
                     }
                 }
             },

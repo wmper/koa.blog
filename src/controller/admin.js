@@ -5,6 +5,10 @@ route.get('/admin', async (ctx) => {
     await ctx.render('admin/main')
 })
 
+route.get('/admin/info', async (ctx) => {
+    await ctx.render('admin/info')
+})
+
 route.get('/admin/console', async (ctx) => {
     await ctx.render('admin/console')
 })
