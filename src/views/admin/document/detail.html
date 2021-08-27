@@ -46,9 +46,10 @@
                         </el-tooltip>
                     </el-form-item>
                     <el-form-item label="封面">
-                        <el-upload class="avatar-uploader" action="/api/upload" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                        <el-upload class="avatar-uploader" action="/api/upload" :show-file-list="false" :on-success="handleAvatarSuccess">
                             <img v-if="form.logo" :src="form.logo" class="avatar" />
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            <div slot="tip" class="el-upload__tip">只能上传图片文件，且不超过500kb</div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="内容" class="custom">
@@ -112,18 +113,6 @@
                         } else {
                             this.$message.error(res.message)
                         }
-                    },
-                    beforeAvatarUpload(file) {
-                        const isJPG = file.type === 'image/jpeg'
-                        const isLt2M = file.size / 1024 / 1024 < 2
-
-                        if (!isJPG) {
-                            this.$message.error('上传头像图片只能是 JPG 格式!')
-                        }
-                        if (!isLt2M) {
-                            this.$message.error('上传头像图片大小不能超过 2MB!')
-                        }
-                        return isJPG && isLt2M
                     }
                 },
                 mounted() {
