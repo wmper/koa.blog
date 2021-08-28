@@ -1,5 +1,4 @@
 const route = require('koa-router')()
-const { query } = require('../utils/mysql')
 
 route.get('/admin', async (ctx) => {
     await ctx.render('admin/main')
@@ -31,6 +30,10 @@ route.get('/admin/document', async (ctx) => {
 
 route.get('/admin/document/:id', async (ctx) => {
     await ctx.render('admin/document/detail')
+})
+
+route.get('/admin/file', async (ctx) => {
+    await ctx.render('admin/file')
 })
 
 module.exports = route

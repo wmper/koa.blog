@@ -1,6 +1,7 @@
 const { query, single, getPaged, excute } = require('../utils/mysql')
 const { getUser } = require('./user')
 const { getCategoryTree } = require('./category')
+const { saveFileLog, getFiles, deleteFileLog } = require('./file')
 
 /**
  * 获取站点信息
@@ -33,4 +34,13 @@ async function getHomeDocs(pageIndex, sort) {
     return await getPaged('select a.*,b.name as category_name from document a left join category b on a.category_id = b.id order by ' + str + ' desc', [], { pageIndex: pageIndex, pageSize: pageSize })
 }
 
-module.exports = { getSite, getDoc, getHomeDocs, getUser, getCategoryTree }
+module.exports = {
+    getSite,
+    getDoc,
+    getHomeDocs,
+    getUser,
+    getCategoryTree,
+    saveFileLog,
+    getFiles,
+    deleteFileLog
+}

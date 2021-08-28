@@ -1,6 +1,7 @@
 const route = require('koa-router')()
-const { listToTree, getUUId, getMD5 } = require('../utils/common')
+const { listToTree, getUUId, getMD5, getPagerData } = require('../utils/common')
 const { pool, query, getPaged, excute, single } = require('../utils/mysql')
+const { getFiles, deleteFileLog } = require('../service/index')
 
 // 菜单
 route.get('/api/menu/tree', async (ctx) => {
@@ -139,4 +140,17 @@ route.get('/api/document/:id', async (ctx) => {
     let data = await single('select * from document where id = ?', [ctx.params.id])
     ctx.body = { code: 0, data: data }
 })
+
+route.post('/api/file/list', async (ctx) => {
+    let body = ctx.request.body
+
+    let data = await getFiles({ pageIndex: body.pageIndex, pageSize: body.pageSize })
+    ctx.body = { code: 0, data: Object.assign({}, data, getPagerData(data)), msg: null }
+})
+
+route.delete('/api/file/:id', async (ctx) => {
+    let rs = await deleteFileLog(ct.params.id)
+    if (rs.affectedRows > 0) ctx.body = { code: 0, msg: '删除成功' }
+})
+
 module.exports = route

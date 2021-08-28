@@ -3,6 +3,7 @@ const fs = require('fs')
 const Busboy = require('busboy')
 const path = require('path')
 const uuid = require('node-uuid')
+const { saveFileLog } = require('../service/index')
 
 route.get('/error', async (ctx) => {
     await ctx.render('404')
@@ -18,7 +19,7 @@ route.post('/api/upload', async (ctx) => {
     }
 
     let task = new Promise((resolve, reject) => {
-        busboy.on('file', function (_fieldname, file, filename, _encoding, _mimetype) {
+        busboy.on('file', function (_fieldname, file, filename, _encoding, mimetype) {
             let temps = filename.split('.')
             var suffix = temps[temps.length - 1]
 
@@ -28,12 +29,14 @@ route.post('/api/upload', async (ctx) => {
             file.pipe(fs.createWriteStream(dir + name))
 
             file.on('data', function (data) {
-                result.size = data.length
+                result.size += data.length
             })
 
             file.on('end', function () {
                 result.success = 1
                 result.message = '上传成功'
+
+                saveFileLog({ file_name: result.url, mime_type: mimetype, size: result.size })
             })
         })
 
